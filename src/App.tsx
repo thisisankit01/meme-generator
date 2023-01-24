@@ -5,7 +5,7 @@ import Image from './image'
 export default function App() {
 
   return (
-    <div>
+    <div className='pb-12'>
       <Header />
       <Input />
       <Image />
