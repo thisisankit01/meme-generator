@@ -4,13 +4,42 @@ import memesData from './memePage'
 
 export default function Input() {
 
-  const [memeImage,setMemeImage] = React.useState("")
+   /**
+     * Challenge: Update our state to save the meme-related
+     * data as an object called `meme`. It should have the
+     * following 3 properties:
+     * topText, bottomText, randomImage.
+     * 
+     * The 2 text states can default to empty strings for now,
+     * amd randomImage should default to "http://i.imgflip.com/1bij.jpg"
+     * 
+     * Next, create a new state variable called `allMemeImages`
+     * which will default to `memesData`, which we imported above
+     * 
+     * Lastly, update the `getMemeImage` function and the markup 
+     * to reflect our newly reformed state object and array in the
+     * correct way.
+     */
+    
+
+ // const [memeImage,setMemeImage] = React.useState("http://i.imgflip.com/1bij.jpg")
+
+ const [meme,setMeme] = React.useState({
+  topText : "",
+  bottomText: "",
+  randomImage: "http://i.imgflip.com/1bij.jpg"
+ })
+
+ const [allMemeImages,setAllMemeImages] = React.useState(memesData)
 
    function getMemeImage(){
     const memesArray = memesData.data.memes
     const randomImage = Math.floor(Math.floor(Math.random() * memesArray.length))
     const url = memesArray[randomImage].url
-    setMemeImage(url)
+    setMeme(prevMeme => ({
+      ...prevMeme,
+      randomImage: url
+    }))
    }
 
 
@@ -24,7 +53,7 @@ export default function Input() {
       <h4>Get a new meme image 🖼️</h4>
       </button>
       <div className="container mx-auto border mt-16 max-h-[268px] max-w-[477px] mb-14">
-        <img className='container mx-auto' src={memeImage}/>
+        <img className='container mx-auto' src={meme.randomImage}/>
       </div>
     </div>
   )
