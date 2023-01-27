@@ -7,18 +7,17 @@ export default function Input() {
     bottomText: "",
     randomImage: "http://i.imgflip.com/1bij.jpg" 
 })
-const [allMemeImages, setAllMemeImages] = React.useState([])
-    
-React.useEffect(async () => {
-  const res = await fetch("https://api.imgflip.com/get_memes")
-  const data = await res.json()
-  setAllMemeImages(data.data.memes)
+const [allMemes, setAllMemes] = React.useState([])
+
+React.useEffect(() => {
+  fetch("https://api.imgflip.com/get_memes")
+      .then(res => res.json())
+      .then(data => setAllMemes(data.data.memes))
 }, [])
 
-
 function getMemeImage() {
-    const randomNumber = Math.floor(Math.random() * allMemeImages.length)
-    const url = allMemeImages[randomNumber].url
+    const randomNumber = Math.floor(Math.random() * allMemes.length)
+    const url = allMemes[randomNumber].url
     setMeme(prevMeme => ({
         ...prevMeme,
         randomImage: url
