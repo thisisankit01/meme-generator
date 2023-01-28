@@ -12,7 +12,7 @@ const [allMemes, setAllMemes] = React.useState([])
 React.useEffect(() => {
   fetch("https://api.imgflip.com/get_memes")
       .then(res => res.json())
-      .then(data => setAllMemes(data.data.memes))
+      .then(data => setAllMemes(data?.data?.memes))
 }, [])
 
 function getMemeImage() {
@@ -32,6 +32,13 @@ function handleChange(event : any) {
         [name]: value
     }))
 }
+
+function downloadImage() {
+    const link = document.createElement("a");
+    link.href = meme.randomImage;
+    link.download = "meme.png";
+    link.click();
+  }
 
 return (
     <main>
@@ -64,6 +71,8 @@ return (
             <h2 className="meme--text top">{meme.topText}</h2>
             <h2 className="meme--text bottom">{meme.bottomText}</h2>
         </div>
+
+        <button onClick={downloadImage}>Download Image</button>
     </main>
 )
 }
