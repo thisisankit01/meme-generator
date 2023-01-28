@@ -6,7 +6,7 @@
   "scripts": {
     "start": "npm run dev",
     "dev": "vite",
-    "build": "parcel build index.html",
+    "build": "vite build index.html",
     "preview": "vite preview"
   },
   "dependencies": {
