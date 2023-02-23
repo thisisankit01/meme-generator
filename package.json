@@ -5,16 +5,19 @@
   "type": "module",
   "main": "index.html",
   "scripts": {
-    "start": "npm run dev",
+    "start": "vite index.html",
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
+    "downloadjs": "^1.4.7",
+    "html2canvas": "^1.4.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
+    "@types/downloadjs": "^1.4.3",
     "@types/react": "^18.0.26",
     "@types/react-dom": "^18.0.9",
     "@vitejs/plugin-react": "^3.0.0",

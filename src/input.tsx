@@ -1,78 +1,90 @@
-import React from 'react'
+import React from 'react';
+import html2canvas from "html2canvas";
+import download from 'downloadjs';
 
 export default function Input() {
-
   const [meme, setMeme] = React.useState({
     topText: "",
     bottomText: "",
-    randomImage: "http://i.imgflip.com/1bij.jpg" 
-})
-const [allMemes, setAllMemes] = React.useState([])
+    randomImage: "http://i.imgflip.com/1bij.jpg",
+  });
 
-React.useEffect(() => {
-  fetch("https://api.imgflip.com/get_memes")
-      .then(res => res.json())
-      .then(data => setAllMemes(data?.data?.memes))
-}, [])
+  const [allMemeImages, setAllMemeImages] = React.useState([]);
 
-function getMemeImage() {
-    const randomNumber = Math.floor(Math.random() * allMemes.length)
-    const url = allMemes[randomNumber].url
-    setMeme(prevMeme => ({
-        ...prevMeme,
-        randomImage: url
-    }))
-    
-}
+  React.useEffect(() => {
+    fetch("https://api.imgflip.com/get_memes")
+      .then((data) => data.json())
+      .then((data) => setAllMemeImages(data?.data?.memes));
+    console.log(allMemeImages);
+  }, []);
 
-function handleChange(event : any) {
-    const {name, value} = event.target
-    setMeme(prevMeme => ({
-        ...prevMeme,
-        [name]: value
-    }))
-}
-
-function downloadImage() {
-    const link = document.createElement("a");
-    link.href = meme.randomImage;
-    link.download = "meme.png";
-    link.click();
+  function getMemeImage() {
+    const memesArray = allMemeImages;
+    const randomNumber = Math.floor(Math.random() * memesArray.length);
+    const url = memesArray[randomNumber].url;
+    setMeme((prevMeme) => ({
+      ...prevMeme,
+      randomImage: url,
+    }));
   }
 
-return (
-    <main>
-        <div className="form">
-            <input 
-                type="text"
-                placeholder="Top text"
-                className="form--input"
-                name="topText"
-                value={meme.topText}
-                onChange={handleChange}
-            />
-            <input 
-                type="text"
-                placeholder="Bottom text"
-                className="form--input"
-                name="bottomText"
-                value={meme.bottomText}
-                onChange={handleChange}
-            />
-            <button 
-                className="form--button"
-                onClick={getMemeImage}
-            >
-                Get a new meme image 🖼
-            </button>
-        </div>
-        <div className="meme container mx-auto">
-            <img src={meme.randomImage} className="meme--image container mx-auto" />
-            <h2 className="meme--text top">{meme.topText}</h2>
-            <h2 className="meme--text bottom">{meme.bottomText}</h2>
-        </div>
+  function handleChange() {
+    const { name, value } = event.target;
+    setMeme((prevMeme) => {
+      return {
+        ...prevMeme,
+        [name]: value,
+      };
+    });
+  }
 
-        <button onClick={downloadImage}>Download Image</button>
+  async function downloadImage() {
+    const canvas = await html2canvas(document.getElementById("meme-container"), {
+      useCORS: true,
+    });
+    const dataURL = canvas.toDataURL("image/png");
+    download(dataURL, "download.png", "image/png");
+  }
+
+  return (
+    <main>
+      <div className="form grid place-content-center">
+        <input
+          type="text"
+          placeholder="Top text"
+          className="form--input"
+          onChange={handleChange}
+          name="topText"
+          value={meme.topText}
+        />
+        <input
+          type="text"
+          placeholder="Bottom text"
+          className="form--input"
+          onChange={handleChange}
+          name="bottomText"
+          value={meme.bottomText}
+        />
+        <button className="form--button max-sm:w-2/3" onClick={getMemeImage}>
+          Get a new meme image 🖼
+        </button>
+      </div>
+      <div className="grid place-content-center meme container max-w-full">
+        <div id="meme-container">
+          <img src={meme.randomImage} className="meme--image" />
+          <h2 className="meme--text top">{meme.topText}</h2>
+          <h2 className="meme--text bottom">{meme.bottomText}</h2>
+        </div>
+      </div>
+
+      <div className="pt-8 grid place-content-center">
+        <button
+          className="form--button py-4 px-8 max-w-full"
+          onClick={downloadImage}
+        >
+          Download meme image 📥
+        </button>
+      </div>
     </main>
-)
+  );
 }
