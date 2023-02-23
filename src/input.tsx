@@ -19,7 +19,7 @@ export default function Input() {
   }, []);
 
   function getMemeImage() {
-    const memesArray = allMemeImages;
+    const memesArray: {url: string}[] = allMemeImages;
     const randomNumber = Math.floor(Math.random() * memesArray.length);
     const url = memesArray[randomNumber].url;
     setMeme((prevMeme) => ({
@@ -28,22 +28,27 @@ export default function Input() {
     }));
   }
 
-  function handleChange() {
-    const { name, value } = event.target;
-    setMeme((prevMeme) => {
-      return {
-        ...prevMeme,
-        [name]: value,
-      };
-    });
+  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+    if (event.target) {
+      const { name, value } = event.target;
+      setMeme((prevMeme) => {
+        return {
+          ...prevMeme,
+          [name]: value,
+        };
+      });
+    }
   }
 
   async function downloadImage() {
-    const canvas = await html2canvas(document.getElementById("meme-container"), {
-      useCORS: true,
-    });
-    const dataURL = canvas.toDataURL("image/png");
-    download(dataURL, "download.png", "image/png");
+    const container = document.getElementById("meme-container");
+    if (container) {
+      const canvas = await html2canvas(container, {
+        useCORS: true,
+      });
+      const dataURL = canvas.toDataURL("image/png");
+      download(dataURL, "download.png", "image/png");
+    }
   }
 
   return (
